@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Card, ListGroup, Spinner } from "react-bootstrap";
 
 const App = () => {
@@ -8,6 +8,19 @@ const App = () => {
   const [postId, setPostId] = useState(1);
 
   const [post, setPost] = useState(null);
+
+  const nextButton = useMemo(() => {
+    if (isLoading) {
+      return (
+        <div>
+          <Spinner animation="border" size="sm" />
+          로딩 중...
+        </div>
+      );
+    } else {
+      return "다음글 보기";
+    }
+  }, [isLoading]);
 
   const getPost = useCallback(() => {
     setIsLoading(true);
@@ -73,14 +86,15 @@ const App = () => {
         onClick={() => setPostId((prev) => prev + 1)}
         disabled={isLoading}
       >
-        {isLoading ? (
+        {nextButton}
+        {/* {isLoading ? (
           <div>
             <Spinner animation="border" size="sm" />
             로딩 중...
           </div>
         ) : (
           "다음글 보기"
-        )}
+        )} */}
       </button>
     </div>
   );
